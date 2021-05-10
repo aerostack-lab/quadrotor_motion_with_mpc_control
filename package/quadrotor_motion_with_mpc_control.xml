@@ -1,0 +1,26 @@
+<library path="lib/libquadrotor_motion_with_mpc_control">
+	<class name="quadrotor_motion_with_mpc_control/BehaviorHoverWithMpcControl" type="quadrotor_motion_with_mpc_control::BehaviorHoverWithMpcControl"
+		base_class_type="nodelet::Nodelet">
+		<description>
+			BehaviorHoverWithMpcControl.
+		</description>
+	</class>
+    <class name="quadrotor_motion_with_mpc_control/BehaviorRotateWithMpcControl" type="quadrotor_motion_with_mpc_control::BehaviorRotateWithMpcControl"
+		base_class_type="nodelet::Nodelet">
+		<description>
+			BehaviorRotateWithMpcControl.
+		</description>
+	</class>	
+	<class name="quadrotor_motion_with_mpc_control/BehaviorFollowPath" type="quadrotor_motion_with_mpc_control::BehaviorFollowPath"
+		base_class_type="nodelet::Nodelet">
+		<description>
+			BehaviorFollowPath.
+		</description>
+	</class>
+	<class name="quadrotor_motion_with_mpc_control/BehaviorQuadrotorMpcMotionControl" type="quadrotor_motion_with_mpc_control::BehaviorQuadrotorMpcMotionControl"
+		base_class_type="nodelet::Nodelet">
+		<description>
+			BehaviorQuadrotorMpcMotionControl.
+		</description>
+	</class>				
+</library>

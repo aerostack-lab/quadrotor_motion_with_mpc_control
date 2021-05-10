@@ -1,0 +1,39 @@
+<launch>
+    <arg name="namespace"                          default="drone1" />
+    <arg name="frecuency"                          default="100.0" />
+    <arg name="activate_behavior_srv"              default="activate_behavior" />
+    <arg name="deactivate_behavior_srv"            default="deactivate_behavior" />
+    <arg name="check_activation_conditions_srv"    default="check_activation_conditions" />
+    <arg name="activation_finished_topic"          default="behavior_activation_finished" />
+    <arg name="behavior_system"                    default="quadrotor_motion_with_mpc_control" />
+    <arg name="drone_max_speed"                    default="1.0" /> <!-- m/s -->
+    <arg name="mav_name"                           default="hummingbird" />
+
+
+    <include file="$(find mav_linear_mpc)/launch/mav_linear_mpc_sim.launch">
+      <arg name="drone_id_namespace"  value="$(arg namespace)" />
+      <arg name="mav_name" 	value="$(arg mav_name)" />
+    </include>
+
+   <group ns="$(arg namespace)/$(arg behavior_system)">
+        <param name="~namespace"                           value="$(arg namespace)"                          type="str" />
+        <param name="~frecuency"                           value="$(arg frecuency)"                          type="double" />
+        <param name="~activate_behavior_srv"               value="$(arg activate_behavior_srv)"              type="str" />
+        <param name="~deactivate_behavior_srv"             value="$(arg deactivate_behavior_srv)"            type="str" />
+        <param name="~check_activation_conditions_srv"     value="$(arg check_activation_conditions_srv)"    type="str" />
+        <param name="~behavior_system"                     value="$(arg behavior_system)"                    type="str" />
+        <param name="~activation_finished_topic"           value="$(arg activation_finished_topic)"          type="str" />
+        <param name="~drone_max_speed"                     value="$(arg drone_max_speed)"                    type="double" /> 
+            
+       <node pkg="nodelet" type="nodelet" args="manager" name="quadrotor_motion_with_mpc_control_manager" output="screen" />
+       <node pkg="nodelet" type="nodelet" args="load quadrotor_motion_with_mpc_control/BehaviorHoverWithMpcControl quadrotor_motion_with_mpc_control_manager"
+        name="behavior_hover_with_mpc_control" output="screen"/>
+       <node pkg="nodelet" type="nodelet" args="load quadrotor_motion_with_mpc_control/BehaviorRotateWithMpcControl quadrotor_motion_with_mpc_control_manager"
+        name="behavior_rotate_with_mpc_control" output="screen"/>         
+       <node pkg="nodelet" type="nodelet" args="load quadrotor_motion_with_mpc_control/BehaviorFollowPath quadrotor_motion_with_mpc_control_manager"
+        name="behavior_follow_path_with_mpc_control" output="screen"/>
+        <node pkg="nodelet" type="nodelet" args="load quadrotor_motion_with_mpc_control/BehaviorQuadrotorMpcMotionControl quadrotor_motion_with_mpc_control_manager"
+        name="behavior_quadrotor_mpc_motion_control" output="screen"/>                         
+  </group>
+</launch>
+
