@@ -37,7 +37,6 @@
 
 // ROS
 #include "std_srvs/Empty.h"
-#include <nodelet/nodelet.h>
 #include <ros/ros.h>
 #include <tf2/LinearMath/Quaternion.h>
 #include <tf2/LinearMath/Matrix3x3.h>
@@ -52,14 +51,11 @@
 #include "aerostack_msgs/FlightActionCommand.h"
 
 // Aerostack libraries
-#include <behavior_execution_controller.h>
+#include <BehaviorExecutionManager.h>
 #include "aerostack_msgs/SetControlMode.h"
 #include <yaml-cpp/yaml.h>
 
-
-namespace quadrotor_motion_with_mpc_control
-{
-class BehaviorRotateWithMpcControl : public BehaviorExecutionController
+class BehaviorRotateWithMpcControl : public BehaviorExecutionManager
 {
   // Constructor
 public:
@@ -93,7 +89,7 @@ private:
 
   bool received_speed;
 private:
-  // BehaviorExecutionController
+  // BehaviorExecutionManager
   void onConfigure();
   void onActivate();
   void onDeactivate();
@@ -111,6 +107,5 @@ public:
   void selfLocalizationSpeedCallBack(const geometry_msgs::TwistStamped::ConstPtr &msg);
   void selfLocalizationPoseCallBack(const geometry_msgs::PoseStamped::ConstPtr &msg);
 };
-}
 
 #endif

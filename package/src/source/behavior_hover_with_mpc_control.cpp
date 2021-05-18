@@ -29,13 +29,18 @@
  *******************************************************************************/
 
 #include "../include/behavior_hover_with_mpc_control.h"
-#include <pluginlib/class_list_macros.h>
 #include <iostream>
 #include <fstream>
 
-namespace quadrotor_motion_with_mpc_control
-{
-BehaviorHoverWithMpcControl::BehaviorHoverWithMpcControl() : BehaviorExecutionController() { 
+int main(int argc, char** argv){
+  ros::init(argc, argv, ros::this_node::getName());
+  std::cout << "Node: " << ros::this_node::getName() << " started" << std::endl;
+  BehaviorHoverWithMpcControl behavior;
+  behavior.start();
+  return 0;
+}
+
+BehaviorHoverWithMpcControl::BehaviorHoverWithMpcControl() : BehaviorExecutionManager() { 
   setName("hover_with_mpc_control"); 
   setExecutionGoal(ExecutionGoals::KEEP_RUNNING); 
 }
@@ -102,7 +107,7 @@ void BehaviorHoverWithMpcControl::checkProgress() {
                     pow(estimated_pose_msg.pose.position.z-reference_pose.pose.position.z,2));
 
     if (distance > 1) 
-      BehaviorExecutionController::setTerminationCause(behavior_execution_manager_msgs::BehaviorActivationFinished::WRONG_PROGRESS);
+      BehaviorExecutionManager::setTerminationCause(behavior_execution_manager_msgs::BehaviorActivationFinished::WRONG_PROGRESS);
   }
 }
 
@@ -133,6 +138,3 @@ void BehaviorHoverWithMpcControl::flightStatusCallBack(const aerostack_msgs::Fli
 void BehaviorHoverWithMpcControl::selfLocalizationSpeedCallBack(const geometry_msgs::TwistStamped &msg){
   estimated_speed_msg = msg; received_speed = true;
 }
-
-}
-PLUGINLIB_EXPORT_CLASS(quadrotor_motion_with_mpc_control::BehaviorHoverWithMpcControl, nodelet::Nodelet)

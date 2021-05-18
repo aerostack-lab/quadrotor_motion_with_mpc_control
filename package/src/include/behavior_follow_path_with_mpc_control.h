@@ -37,7 +37,6 @@
 
 // ROS
 #include "std_srvs/Empty.h"
-#include <nodelet/nodelet.h>
 #include <ros/ros.h>
 #include <tf2/LinearMath/Quaternion.h>
 #include <tf2/LinearMath/Matrix3x3.h>
@@ -54,16 +53,14 @@
 #include "aerostack_msgs/FlightActionCommand.h"
 #include <nav_msgs/Path.h>
 // Aerostack libraries
-#include <behavior_execution_controller.h>
+#include <BehaviorExecutionManager.h>
 #include "aerostack_msgs/SetControlMode.h"
 #include <yaml-cpp/yaml.h>
 #include <std_msgs/Bool.h>
 
 const int MAX_DISTANCE = 1000; //maximum meters allowed
 
-namespace quadrotor_motion_with_mpc_control
-{
-class BehaviorFollowPath : public BehaviorExecutionController
+class BehaviorFollowPath : public BehaviorExecutionManager
 {
   // Constructor
 public:
@@ -104,7 +101,7 @@ private:
   bool path_blocked;
 
 private:
-  // BehaviorExecutionController
+  // BehaviorExecutionManager
   void onConfigure();
   void onActivate();
   void onDeactivate();
@@ -124,6 +121,5 @@ void motionReferencePoseCallBack(const geometry_msgs::PoseStamped &msg);
 void motionReferenceRemainingPathCallBack(const nav_msgs::Path &msg);
 void pathBlockedCallBack(const std_msgs::Bool &msg);
 };
-}
 
 #endif

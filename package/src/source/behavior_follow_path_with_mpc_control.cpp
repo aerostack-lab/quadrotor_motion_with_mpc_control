@@ -28,12 +28,17 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *******************************************************************************/
 
-#include "../include/behavior_follow_path.h"
-#include <pluginlib/class_list_macros.h>
+#include "../include/behavior_follow_path_with_mpc_control.h"
 
-namespace quadrotor_motion_with_mpc_control
-{
-BehaviorFollowPath::BehaviorFollowPath() : BehaviorExecutionController() { 
+int main(int argc, char** argv){
+  ros::init(argc, argv, ros::this_node::getName());
+  std::cout << "Node: " << ros::this_node::getName() << " started" << std::endl;
+  BehaviorFollowPath behavior;
+  behavior.start();
+  return 0;
+}
+
+BehaviorFollowPath::BehaviorFollowPath() : BehaviorExecutionManager() { 
   setName("follow_path_with_mpc_control");
   setExecutionGoal(ExecutionGoals::ACHIEVE_GOAL);
 }
@@ -56,7 +61,7 @@ bool BehaviorFollowPath::checkSituation()
 void BehaviorFollowPath::checkGoal(){ 
   if(initiated && remaining_points <= 1 && checkFinalDistance() < 0.1 && checkQuadrotorStopped()){
     initiated = false;
-    BehaviorExecutionController::setTerminationCause(behavior_execution_manager_msgs::BehaviorActivationFinished::GOAL_ACHIEVED);
+    BehaviorExecutionManager::setTerminationCause(behavior_execution_manager_msgs::BehaviorActivationFinished::GOAL_ACHIEVED);
   } 
 }
 
@@ -76,15 +81,15 @@ void BehaviorFollowPath::checkProgress() {
   if(path_blocked){
     path_blocked=false;
     path_blocked_sub.shutdown();
-    BehaviorExecutionController::setTerminationCause(behavior_execution_manager_msgs::BehaviorActivationFinished::WRONG_PROGRESS);
+    BehaviorExecutionManager::setTerminationCause(behavior_execution_manager_msgs::BehaviorActivationFinished::WRONG_PROGRESS);
   }
-  if (!execute) BehaviorExecutionController::setTerminationCause(behavior_execution_manager_msgs::BehaviorActivationFinished::WRONG_PROGRESS);
+  if (!execute) BehaviorExecutionManager::setTerminationCause(behavior_execution_manager_msgs::BehaviorActivationFinished::WRONG_PROGRESS);
 
   //Quadrotor is too far from the target and it is not moving
   last_target_pose = current_target_pose;
   float targets_distance = abs(sqrt(pow(last_target_pose.pose.position.x-current_target_pose.pose.position.x,2)+pow(last_target_pose.pose.position.y-current_target_pose.pose.position.y,2)+pow(last_target_pose.pose.position.z-current_target_pose.pose.position.z,2)));
   float quadrotor_distance = abs(sqrt(pow(current_target_pose.pose.position.x-estimated_pose_msg.pose.position.x,2)+pow(current_target_pose.pose.position.y-estimated_pose_msg.pose.position.y,2)+pow(current_target_pose.pose.position.z-estimated_pose_msg.pose.position.z,2)));
-  if(remaining_points > 0 && targets_distance > quadrotor_distance * 2 && checkQuadrotorStopped()) BehaviorExecutionController::setTerminationCause(behavior_execution_manager_msgs::BehaviorActivationFinished::WRONG_PROGRESS);
+  if(remaining_points > 0 && targets_distance > quadrotor_distance * 2 && checkQuadrotorStopped()) BehaviorExecutionManager::setTerminationCause(behavior_execution_manager_msgs::BehaviorActivationFinished::WRONG_PROGRESS);
 }
 
 void BehaviorFollowPath::onActivate()
@@ -305,6 +310,3 @@ void BehaviorFollowPath::motionReferenceRemainingPathCallBack(const nav_msgs::Pa
   remaining_points = remaining_path.poses.size();
   initiated = true;
 }
-
-}
-PLUGINLIB_EXPORT_CLASS(quadrotor_motion_with_mpc_control::BehaviorFollowPath, nodelet::Nodelet)

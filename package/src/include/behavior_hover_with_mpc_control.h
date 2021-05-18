@@ -48,12 +48,10 @@
 #include <behavior_execution_manager_msgs/BehaviorActivationFinished.h>
 
 // Aerostack libraries
-#include <behavior_execution_controller.h>
+#include <BehaviorExecutionManager.h>
 #include "aerostack_msgs/SetControlMode.h"
 
-namespace quadrotor_motion_with_mpc_control
-{
-class BehaviorHoverWithMpcControl : public BehaviorExecutionController
+class BehaviorHoverWithMpcControl : public BehaviorExecutionManager
 {
   // Constructor
 public:
@@ -81,7 +79,7 @@ private:
   bool received_speed;
 
 private:
-  // BehaviorExecutionController
+  // BehaviorExecutionManager
   void onConfigure();
   void onActivate();
   void onDeactivate();
@@ -98,6 +96,5 @@ public:
   void flightStatusCallBack(const aerostack_msgs::FlightState &msg);
   void selfLocalizationSpeedCallBack(const geometry_msgs::TwistStamped &msg);
 };
-}
 
 #endif

@@ -29,11 +29,16 @@
  *******************************************************************************/
 
 #include "../include/behavior_rotate_with_mpc_control.h"
-#include <pluginlib/class_list_macros.h>
 
-namespace quadrotor_motion_with_mpc_control
-{
-BehaviorRotateWithMpcControl::BehaviorRotateWithMpcControl() : BehaviorExecutionController() { 
+int main(int argc, char** argv){
+  ros::init(argc, argv, ros::this_node::getName());
+  std::cout << "Node: " << ros::this_node::getName() << " started" << std::endl;
+  BehaviorRotateWithMpcControl behavior;
+  behavior.start();
+  return 0;
+}
+
+BehaviorRotateWithMpcControl::BehaviorRotateWithMpcControl() : BehaviorExecutionManager() { 
   setName("rotate_with_mpc_control"); 
   setExecutionGoal(ExecutionGoals::ACHIEVE_GOAL);
 }
@@ -71,7 +76,7 @@ void BehaviorRotateWithMpcControl::checkGoal(){
       std::cout << "angle2: " << angle2 << std::endl;
 
       if (abs(abs(angle2) - abs(current_angle)) < 0.01 && abs(estimated_speed_msg.twist.angular.x) <= 0.1){
-        BehaviorExecutionController::setTerminationCause(behavior_execution_manager_msgs::BehaviorActivationFinished::GOAL_ACHIEVED);
+        BehaviorExecutionManager::setTerminationCause(behavior_execution_manager_msgs::BehaviorActivationFinished::GOAL_ACHIEVED);
       }
   }
 }
@@ -82,7 +87,7 @@ void BehaviorRotateWithMpcControl::checkProgress() {
                     pow(estimated_pose_msg.pose.position.y-reference_pose.pose.position.y,2)+
                     pow(estimated_pose_msg.pose.position.z-reference_pose.pose.position.z,2));
 
-    if (distance > 1) BehaviorExecutionController::setTerminationCause(behavior_execution_manager_msgs::BehaviorActivationFinished::WRONG_PROGRESS);
+    if (distance > 1) BehaviorExecutionManager::setTerminationCause(behavior_execution_manager_msgs::BehaviorActivationFinished::WRONG_PROGRESS);
   }
 }
 
@@ -193,9 +198,5 @@ void BehaviorRotateWithMpcControl::selfLocalizationPoseCallBack(const geometry_m
   estimated_pose_msg = *msg;
 }
 
-void BehaviorRotateWithMpcControl::onExecute()
-{
+void BehaviorRotateWithMpcControl::onExecute(){
 }
-
-}
-PLUGINLIB_EXPORT_CLASS(quadrotor_motion_with_mpc_control::BehaviorRotateWithMpcControl, nodelet::Nodelet)

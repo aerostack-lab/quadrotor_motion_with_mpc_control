@@ -25,15 +25,10 @@
         <param name="~activation_finished_topic"           value="$(arg activation_finished_topic)"          type="str" />
         <param name="~drone_max_speed"                     value="$(arg drone_max_speed)"                    type="double" /> 
             
-       <node pkg="nodelet" type="nodelet" args="manager" name="quadrotor_motion_with_mpc_control_manager" output="screen" />
-       <node pkg="nodelet" type="nodelet" args="load quadrotor_motion_with_mpc_control/BehaviorHoverWithMpcControl quadrotor_motion_with_mpc_control_manager"
-        name="behavior_hover_with_mpc_control" output="screen"/>
-       <node pkg="nodelet" type="nodelet" args="load quadrotor_motion_with_mpc_control/BehaviorRotateWithMpcControl quadrotor_motion_with_mpc_control_manager"
-        name="behavior_rotate_with_mpc_control" output="screen"/>         
-       <node pkg="nodelet" type="nodelet" args="load quadrotor_motion_with_mpc_control/BehaviorFollowPath quadrotor_motion_with_mpc_control_manager"
-        name="behavior_follow_path_with_mpc_control" output="screen"/>
-        <node pkg="nodelet" type="nodelet" args="load quadrotor_motion_with_mpc_control/BehaviorQuadrotorMpcMotionControl quadrotor_motion_with_mpc_control_manager"
-        name="behavior_quadrotor_mpc_motion_control" output="screen"/>                         
+       <node name="behavior_hover_with_mpc_control" pkg="quadrotor_motion_with_mpc_control"  type="BehaviorHoverWithMpcControl"  output="screen"/>
+       <node name="behavior_rotate_with_mpc_control" pkg="quadrotor_motion_with_mpc_control"  type="BehaviorRotateWithMpcControl"  output="screen"/>
+       <node name="behavior_follow_path_with_mpc_control" pkg="quadrotor_motion_with_mpc_control"  type="BehaviorFollowPathWithMpcControl"  output="screen"/>
+       <node name="behavior_quadrotor_mpc_motion_control" pkg="quadrotor_motion_with_mpc_control"  type="BehaviorQuadrotorMpcMotionControl"  output="screen"/>                      
   </group>
 </launch>
 

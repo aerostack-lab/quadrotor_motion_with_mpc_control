@@ -36,7 +36,7 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   nodelet
   std_msgs
-  behavior_execution_controller
+  behavior_execution_manager
   behavior_execution_manager_msgs
   geometry_msgs
   aerostack_msgs
@@ -58,7 +58,7 @@ catkin_package(
   roscpp 
   nodelet
   std_msgs
-  behavior_execution_controller
+  behavior_execution_manager
   behavior_execution_manager_msgs
   geometry_msgs
   trajectory_msgs
@@ -77,15 +77,26 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
-## Declare a C++ library
-add_library(quadrotor_motion_with_mpc_control
-  src/source/behavior_hover_with_mpc_control.cpp 
-  src/source/behavior_follow_path.cpp 
-  src/source/behavior_rotate_with_mpc_control.cpp
-  src/source/behavior_quadrotor_mpc_motion_control.cpp   
-)
-target_link_libraries(quadrotor_motion_with_mpc_control ${catkin_LIBRARIES})
-target_link_libraries(quadrotor_motion_with_mpc_control yaml-cpp)
+add_executable(BehaviorHoverWithMpcControl ${QUADROTOR_MOTION_WITH_MPC_CONTROL_SOURCE_DIR}/behavior_hover_with_mpc_control.cpp)
+target_link_libraries(BehaviorHoverWithMpcControl ${catkin_LIBRARIES})
+target_link_libraries(BehaviorHoverWithMpcControl yaml-cpp)
+
+add_executable(BehaviorFollowPathWithMpcControl ${QUADROTOR_MOTION_WITH_MPC_CONTROL_SOURCE_DIR}/behavior_follow_path_with_mpc_control.cpp)
+target_link_libraries(BehaviorFollowPathWithMpcControl ${catkin_LIBRARIES})
+target_link_libraries(BehaviorFollowPathWithMpcControl yaml-cpp)
+
+add_executable(BehaviorRotateWithMpcControl ${QUADROTOR_MOTION_WITH_MPC_CONTROL_SOURCE_DIR}/behavior_rotate_with_mpc_control.cpp)
+target_link_libraries(BehaviorRotateWithMpcControl ${catkin_LIBRARIES})
+target_link_libraries(BehaviorRotateWithMpcControl yaml-cpp)
+
+add_executable(BehaviorQuadrotorMpcMotionControl ${QUADROTOR_MOTION_WITH_MPC_CONTROL_SOURCE_DIR}/behavior_quadrotor_mpc_motion_control.cpp)
+target_link_libraries(BehaviorQuadrotorMpcMotionControl ${catkin_LIBRARIES})
+target_link_libraries(BehaviorQuadrotorMpcMotionControl yaml-cpp)
+
+
 if(catkin_EXPORTED_LIBRARIES)
-  add_dependencies(quadrotor_motion_with_mpc_control ${catkin_EXPORTED_LIBRARIES})
+  add_dependencies(BehaviorHoverWithMpcControl ${catkin_EXPORTED_LIBRARIES})
+  add_dependencies(BehaviorFollowPathWithMpcControl ${catkin_EXPORTED_LIBRARIES})
+  add_dependencies(BehaviorRotateWithMpcControl ${catkin_EXPORTED_LIBRARIES})
+  add_dependencies(BehaviorQuadrotorMpcMotionControl ${catkin_EXPORTED_LIBRARIES})
 endif()

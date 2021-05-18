@@ -38,17 +38,14 @@
 #include "std_srvs/Empty.h"
 #include <nodelet/nodelet.h>
 #include <ros/ros.h>
-#include <pluginlib/class_list_macros.h>
 #include <iostream>
 #include <fstream>
 #include <behavior_execution_manager_msgs/BehaviorActivationFinished.h>
 #include "mav_msgs/Actuators.h"
 #include <behavior_execution_manager_msgs/BehaviorActivationFinished.h>
-#include <behavior_execution_controller.h>
+#include <BehaviorExecutionManager.h>
 
-namespace quadrotor_motion_with_mpc_control
-{
-class BehaviorQuadrotorMpcMotionControl : public BehaviorExecutionController
+class BehaviorQuadrotorMpcMotionControl : public BehaviorExecutionManager
 {
   // Constructor
 public:
@@ -60,7 +57,7 @@ private:
   std::string nspace;
 
 private:
-  // BehaviorExecutionController
+  // BehaviorExecutionManager
   void onConfigure();
   void onActivate();
   void onDeactivate();
@@ -71,6 +68,5 @@ private:
   void checkProcesses();
 
 };
-}
 
 #endif

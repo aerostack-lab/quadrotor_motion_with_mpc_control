@@ -30,9 +30,15 @@
 
 #include "../include/behavior_quadrotor_mpc_motion_control.h"
 
-namespace quadrotor_motion_with_mpc_control
-{
-BehaviorQuadrotorMpcMotionControl::BehaviorQuadrotorMpcMotionControl() : BehaviorExecutionController() { 
+int main(int argc, char** argv){
+  ros::init(argc, argv, ros::this_node::getName());
+  std::cout << "Node: " << ros::this_node::getName() << " started" << std::endl;
+  BehaviorQuadrotorMpcMotionControl behavior;
+  behavior.start();
+  return 0;
+}
+
+BehaviorQuadrotorMpcMotionControl::BehaviorQuadrotorMpcMotionControl() : BehaviorExecutionManager() { 
   setName("quadrotor_mpc_motion_control"); 
   setExecutionGoal(ExecutionGoals::KEEP_RUNNING); 
 }
@@ -68,6 +74,3 @@ void BehaviorQuadrotorMpcMotionControl::onExecute(){}
 void BehaviorQuadrotorMpcMotionControl::checkGoal(){}
 void BehaviorQuadrotorMpcMotionControl::checkProgress(){}
 void BehaviorQuadrotorMpcMotionControl::checkProcesses(){}
-
-}
-PLUGINLIB_EXPORT_CLASS(quadrotor_motion_with_mpc_control::BehaviorQuadrotorMpcMotionControl, nodelet::Nodelet)
